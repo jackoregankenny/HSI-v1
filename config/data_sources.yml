@@ -1,0 +1,116 @@
+# Configuration file for hyperspectral data sources
+# This file defines various internet sources for soil quality hyperspectral data
+
+# Satellite data sources
+satellite_sources:
+  sentinel2:
+    name: "Sentinel-2 MSI"
+    api_endpoint: "https://scihub.copernicus.eu/dhus/search"
+    description: "European Space Agency multispectral imagery"
+    spatial_resolution: 10  # meters
+    temporal_resolution: 5  # days
+    spectral_bands: 13
+    requires_auth: true
+    
+  landsat8:
+    name: "Landsat 8 OLI/TIRS"
+    api_endpoint: "https://earthexplorer.usgs.gov/inventory/json/v/1.4.0/"
+    description: "USGS operational land imager data"
+    spatial_resolution: 30  # meters
+    temporal_resolution: 16  # days
+    spectral_bands: 11
+    requires_auth: true
+
+# Ground-based sensor networks
+sensor_networks:
+  neon:
+    name: "NEON Airborne Observation Platform"
+    api_endpoint: "http://data.neonscience.org/api/v0/"
+    description: "National Ecological Observatory Network hyperspectral data"
+    spatial_resolution: 1  # meter
+    spectral_bands: 426
+    wavelength_range: [380, 2510]  # nanometers
+    requires_auth: false
+    
+  aviris:
+    name: "AVIRIS-NG"
+    api_endpoint: "https://aviris.jpl.nasa.gov/aviris_locator/"
+    description: "JPL Airborne Visible/Infrared Imaging Spectrometer"
+    spatial_resolution: 5  # meters
+    spectral_bands: 425
+    wavelength_range: [380, 2510]  # nanometers
+    requires_auth: false
+
+# Spectral libraries and reference data
+spectral_libraries:
+  usgs:
+    name: "USGS Spectral Library"
+    api_endpoint: "https://crustal.usgs.gov/speclab/QueryAll07a.php"
+    description: "Mineral and soil spectral library from USGS"
+    data_format: "ASCII"
+    wavelength_range: [200, 3000]  # nanometers
+    requires_auth: false
+    
+  aster:
+    name: "ASTER Spectral Library"
+    api_endpoint: "https://speclib.jpl.nasa.gov/"
+    description: "JPL ASTER spectral library"
+    data_format: "ASCII"
+    materials: ["minerals", "rocks", "soils", "vegetation"]
+    requires_auth: false
+
+# Agricultural and soil databases
+agricultural_sources:
+  ssurgo:
+    name: "SSURGO Soil Database"
+    api_endpoint: "https://sdmdataaccess.sc.egov.usda.gov/"
+    description: "USDA soil survey geographic database"
+    data_type: "soil_properties"
+    spatial_coverage: "United States"
+    requires_auth: false
+    
+  global_soil_map:
+    name: "GlobalSoilMap"
+    api_endpoint: "http://globalsoilmap.net/data/"
+    description: "Global soil property predictions"
+    data_type: "soil_properties"
+    spatial_coverage: "Global"
+    resolution: 250  # meters
+    requires_auth: false
+
+# Field boundaries and geographic data
+geographic_sources:
+  openstreetmap:
+    name: "OpenStreetMap"
+    api_endpoint: "https://overpass-api.de/api/"
+    description: "Open source geographic data"
+    data_type: "field_boundaries"
+    requires_auth: false
+    
+  usda_crop_data_layer:
+    name: "USDA Cropland Data Layer"
+    api_endpoint: "https://nassgeodata.gmu.edu/api/v1.2/"
+    description: "Crop type classification"
+    spatial_resolution: 30  # meters
+    temporal_coverage: "2008-present"
+    requires_auth: false
+
+# Data collection parameters
+collection_params:
+  max_cloud_cover: 10  # percent
+  date_range_days: 365  # days from current date
+  max_file_size_mb: 1000  # maximum file size to download
+  retry_attempts: 3
+  timeout_seconds: 300
+  
+# File formats and processing options
+file_formats:
+  preferred: ["ENVI", "GeoTIFF", "NetCDF", "HDF5"]
+  supported: ["ENVI", "GeoTIFF", "NetCDF", "HDF5", "ASCII", "CSV"]
+  
+# Quality control parameters
+quality_control:
+  min_snr: 10  # minimum signal-to-noise ratio
+  max_missing_bands: 5  # maximum number of missing spectral bands
+  geometric_accuracy_threshold: 30  # meters
+  radiometric_calibration_required: true 

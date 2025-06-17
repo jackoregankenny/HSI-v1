@@ -1,0 +1,188 @@
+# Analysis Parameters for Hyperspectral Soil Quality Assessment
+# Configuration file for processing and modeling parameters
+
+# Spectral preprocessing parameters
+preprocessing:
+  # Noise reduction
+  smoothing:
+    method: "savitzky_golay"  # Options: "savitzky_golay", "moving_average", "gaussian"
+    window_size: 5
+    polynomial_order: 2
+    
+  # Normalization methods
+  normalization:
+    method: "snv"  # Options: "snv", "msc", "continuum_removal", "min_max", "z_score"
+    reference_spectrum: "mean"  # Options: "mean", "median", "external_reference"
+    
+  # Spectral resampling
+  resampling:
+    target_resolution: 5  # nanometers
+    interpolation_method: "linear"  # Options: "linear", "spline", "nearest"
+    
+  # Outlier detection
+  outlier_detection:
+    method: "isolation_forest"  # Options: "isolation_forest", "mahalanobis", "spectral_angle"
+    threshold: 0.1  # contamination rate
+    
+# Feature extraction and selection
+feature_extraction:
+  # Spectral indices for soil properties
+  vegetation_indices:
+    - "NDVI"    # Normalized Difference Vegetation Index
+    - "EVI"     # Enhanced Vegetation Index
+    - "SAVI"    # Soil Adjusted Vegetation Index
+    - "MSAVI"   # Modified Soil Adjusted Vegetation Index
+    
+  soil_indices:
+    - "BI"      # Brightness Index
+    - "CI"      # Coloration Index
+    - "RI"      # Redness Index
+    - "SWIR32"  # SWIR ratio
+    
+  # Derivative spectral features
+  derivatives:
+    orders: [1, 2]  # First and second derivatives
+    gap_size: 5     # Gap size for derivative calculation
+    
+  # Principal Component Analysis
+  pca:
+    n_components: 10  # Number of components to retain
+    variance_threshold: 0.95  # Minimum variance explained
+    
+  # Wavelet analysis
+  wavelet:
+    transform: "db4"  # Wavelet type
+    levels: 4         # Decomposition levels
+
+# Soil property modeling parameters
+modeling:
+  # Target soil properties
+  target_properties:
+    - "organic_matter"     # Soil organic matter (%)
+    - "ph"                 # Soil pH
+    - "clay_content"       # Clay content (%)
+    - "sand_content"       # Sand content (%)
+    - "silt_content"       # Silt content (%)
+    - "nitrogen"           # Total nitrogen (mg/kg)
+    - "phosphorus"         # Available phosphorus (mg/kg)
+    - "potassium"          # Exchangeable potassium (mg/kg)
+    - "cec"               # Cation exchange capacity (cmol/kg)
+    - "moisture"          # Soil moisture content (%)
+    
+  # Machine learning algorithms
+  algorithms:
+    random_forest:
+      enabled: true
+      n_trees: 500
+      max_depth: 20
+      min_samples_split: 5
+      min_samples_leaf: 2
+      
+    svm:
+      enabled: true
+      kernel: "rbf"  # Options: "linear", "poly", "rbf", "sigmoid"
+      C: 1.0
+      gamma: "scale"
+      
+    partial_least_squares:
+      enabled: true
+      n_components: 15
+      max_iter: 500
+      
+    gradient_boosting:
+      enabled: true
+      n_estimators: 100
+      learning_rate: 0.1
+      max_depth: 6
+      
+  # Cross-validation parameters
+  cross_validation:
+    method: "k_fold"  # Options: "k_fold", "leave_one_out", "stratified"
+    n_folds: 10
+    n_repeats: 3
+    random_seed: 42
+    
+  # Model evaluation metrics
+  evaluation_metrics:
+    regression:
+      - "RMSE"      # Root Mean Square Error
+      - "R2"        # Coefficient of Determination
+      - "MAE"       # Mean Absolute Error
+      - "RPIQ"      # Ratio of Performance to Interquartile Distance
+      - "RPD"       # Ratio of Performance to Deviation
+      
+# Spatial analysis parameters
+spatial_analysis:
+  # Interpolation methods
+  interpolation:
+    method: "kriging"  # Options: "kriging", "idw", "spline", "nearest_neighbor"
+    variogram_model: "spherical"  # Options: "spherical", "exponential", "gaussian"
+    n_nearest: 12
+    
+  # Grid resolution for mapping
+  grid_resolution: 10  # meters
+  
+  # Spatial aggregation
+  aggregation:
+    method: "mean"  # Options: "mean", "median", "max", "min", "std"
+    buffer_distance: 50  # meters
+    
+# Visualization parameters
+visualization:
+  # Color schemes
+  color_palettes:
+    soil_properties: "viridis"
+    spectral_data: "plasma"
+    vegetation: "RdYlGn"
+    
+  # Plot dimensions
+  figure_size:
+    width: 12
+    height: 8
+    dpi: 300
+    
+  # Map projections
+  map_projection: "EPSG:4326"  # WGS84 geographic coordinate system
+  
+# Quality control thresholds
+quality_control:
+  # Minimum data requirements
+  min_samples_per_class: 30
+  min_spectral_range: 400  # nanometers (minimum range)
+  max_missing_data: 0.05   # Maximum proportion of missing data
+  
+  # Model performance thresholds
+  min_r2: 0.5              # Minimum R-squared for acceptable model
+  max_rmse_threshold: 0.2  # Maximum normalized RMSE
+  
+  # Data validation
+  spectral_range_check: true
+  geometric_validation: true
+  temporal_consistency_check: true
+  
+# Output formats and options
+output:
+  # Report formats
+  report_formats: ["html", "pdf"]
+  
+  # Data export formats
+  export_formats: ["csv", "geotiff", "shapefile", "netcdf"]
+  
+  # Save intermediate results
+  save_preprocessed_data: true
+  save_model_objects: true
+  save_validation_results: true
+  
+# Processing options
+processing:
+  # Parallel processing
+  use_parallel: true
+  n_cores: -1  # -1 uses all available cores
+  
+  # Memory management
+  chunk_size: 1000  # Number of samples to process at once
+  use_disk_cache: true
+  
+  # Logging
+  log_level: "INFO"  # Options: "DEBUG", "INFO", "WARNING", "ERROR"
+  log_file: "logs/analysis.log" 

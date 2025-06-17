@@ -1,0 +1,61 @@
+# R and RStudio files
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj.user/
+
+# Data files (potentially large)
+data/raw/*
+data/processed/*
+data/external/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!data/external/.gitkeep
+
+# Output files
+output/figures/*
+output/reports/*
+output/models/*
+!output/figures/.gitkeep
+!output/reports/.gitkeep
+!output/models/.gitkeep
+
+# Logs
+*.log
+logs/
+
+# API credentials and sensitive config
+.env
+.Renviron
+*credentials*
+*secrets*
+
+# Temporary files
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# Package management
+renv/library/
+renv/staging/
+renv/local/
+
+# System files
+.DS_Store
+*.so
+*.dll
+*.dylib
+
+# Large files that shouldn't be tracked
+*.zip
+*.tar.gz
+*.hdf5
+*.h5
+*.nc
+*.tif
+*.tiff
+*.envi
+*.bil
+*.bsq
+*.bip 
